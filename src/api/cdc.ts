@@ -21,8 +21,8 @@ import { OutbreakRecord, ApiResult } from '../types/outbreak'
 import { safeInt } from '../lib/epidemiology'
 import { US_STATE_COORDS } from '../data/countryCoordinates'
 
-const CDC_ENDPOINT = 'https://data.cdc.gov/resource/634h-66fb.json'
-const SOURCE_URL = 'https://data.cdc.gov/resource/634h-66fb'
+const CDC_ENDPOINT = 'https://data.cdc.gov/resource/chmz-4uae.json'
+const SOURCE_URL = 'https://data.cdc.gov/NNDSS/NNDSS-TABLE-1O-Hansen-s-disease-to-Hantavirus-pulm/chmz-4uae'
 
 const HANTAVIRUS_TERMS = [
   'hantavirus pulmonary syndrome',
