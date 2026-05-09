@@ -14,9 +14,7 @@ const SKIP_AREAS = new Set([
 
 type SocrataRow = Record<string, string | number | undefined>
 
-function isSuppressed(val: string | number | undefined): boolean {
-  return val === 'N' || val === 'U' || val === '-' || val == null || val === ''
-}
+
 
 export async function fetchCDCData(): Promise<ApiResult<OutbreakRecord[]>> {
   const fetchedAt = new Date().toISOString()
