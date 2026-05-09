@@ -53,18 +53,18 @@ export async function fetchCDCData(): Promise<ApiResult<OutbreakRecord[]>> {
 
       const coords = US_STATE_COORDS[stateName]
 
-      const hpsCurrent = isSuppressed(row['hantavirus_pulmonary_syndrome_1'])
-        ? undefined
-        : safeInt(row['hantavirus_pulmonary_syndrome_4']) ?? 0
+     const hpsWeek = safeInt(row['hantavirus_pulmonary_syndrome_4'])
+      const nonHpsWeek = safeInt(row['hantavirus_infection_non_4'])
 
-      const nonHpsCurrent = isSuppressed(row['hantavirus_infection_non_1'])
-        ? undefined
-        : safeInt(row['hantavirus_infection_non_4']) ?? 0
+  const hpsYtd = safeInt(row['hantavirus_pulmonary_syndrome_6'])
+const nonHpsYtd = safeInt(row['hantavirus_infection_non_6'])
 
-      const totalCases =
-        hpsCurrent != null || nonHpsCurrent != null
-          ? (hpsCurrent ?? 0) + (nonHpsCurrent ?? 0)
-          : undefined
+// Use current week count if present, otherwise 0
+const totalCases = (hpsWeek ?? 0) + (nonHpsWeek ?? 0)
+
+// Only include rows that have any YTD activity (filters out completely empty rows)
+const hasActivity = (hpsYtd ?? 0) + (nonHpsYtd ?? 0) > 0 || totalCases > 0
+if (!hasActivity) continue
 
       const record: OutbreakRecord = {
         source: 'CDC',
