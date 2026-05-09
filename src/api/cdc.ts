@@ -9,7 +9,7 @@ const SKIP_AREAS = new Set([
   'US RESIDENTS', 'NEW ENGLAND', 'MIDDLE ATLANTIC', 'EAST NORTH CENTRAL',
   'WEST NORTH CENTRAL', 'SOUTH ATLANTIC', 'EAST SOUTH CENTRAL',
   'WEST SOUTH CENTRAL', 'MOUNTAIN', 'PACIFIC', 'US TERRITORIES',
-  'NON-US RESIDENTS', 'TOTAL', 'NEW YORK CITY'
+  'NON-US RESIDENTS', 'TOTAL', 'NEW YORK CITY',
 ])
 
 type SocrataRow = Record<string, string | number | undefined>
@@ -27,12 +27,12 @@ export async function fetchCDCData(): Promise<ApiResult<OutbreakRecord[]>> {
 
     const response = await fetch(url, {
       headers: { Accept: 'application/json' },
-      signal: AbortSignal.timeout(20_000),
+      signal: AbortSignal.timeout(20000),
     })
 
     if (!response.ok) {
       const body = await response.text()
-      throw new Error(`CDC API returned HTTP ${response.status} ${body}`)
+      throw new Error('CDC API returned HTTP ' + response.status + ' ' + body)
     }
 
     const rows: SocrataRow[] = await response.json()
@@ -63,4 +63,45 @@ export async function fetchCDCData(): Promise<ApiResult<OutbreakRecord[]>> {
 
       const totalCases =
         hpsCurrent != null || nonHpsCurrent != null
-          ? (hpsCurrent ?? 0) + (nonHpsCur
+          ? (hpsCurrent ?? 0) + (nonHpsCurrent ?? 0)
+          : undefined
+
+      const record: OutbreakRecord = {
+        source: 'CDC',
+        disease: 'Hantavirus (HPS + non-HPS)',
+        locationName: stateName,
+        countryCode: 'US',
+        admin1: stateName,
+        latitude: coords?.lat,
+        longitude: coords?.lng,
+        epiYear: year,
+        epiWeek: week,
+        periodLabel: year + ' Week ' + week,
+        cases: totalCases,
+        sourceUrl: SOURCE_URL,
+        raw: row,
+      }
+
+      records.push(record)
+    }
+
+    if (records.length === 0) {
+      return {
+        data: [],
+        error: 'Dataset fetched but no state-level records parsed.',
+        source: 'CDC',
+        fetchedAt,
+      }
+    }
+
+    return { data: records, error: null, source: 'CDC', fetchedAt }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return {
+      data: null,
+      error: 'CDC fetch failed: ' + message,
+      source: 'CDC',
+      fetchedAt,
+    }
+  }
+}
