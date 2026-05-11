@@ -53,6 +53,8 @@ export interface ChartPoint {
   label: string
   cases?: number
   deaths?: number
+  forecastBest?: number
+  forecastWorst?: number
   year?: number
   week?: number
   month?: number

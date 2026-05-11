@@ -137,7 +137,13 @@ export function OutbreakMap({ records }: { records: OutbreakRecord[] }) {
         .hanta-popup .leaflet-popup-close-button { color: #64748b; }
         .leaflet-container { background: #080b0f; }
       `}</style>
-      <div ref={mapRef} className="h-96 w-full rounded-lg border border-slate-700 overflow-hidden relative z-0" />
+      <div className="flex justify-center">
+        <div
+          ref={mapRef}
+          style={{ width: '80%' }}
+          className="h-96 rounded-lg border border-slate-700 overflow-hidden relative z-0"
+        />
+      </div>
       <p className="mt-1 font-mono text-xs text-slate-600">
         Marker size ∝ reported weekly case count · Click for details · Scroll-to-zoom disabled
       </p>

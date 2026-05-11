@@ -7,8 +7,8 @@ import { MetricCard } from '../components/MetricCard'
 import { TrendChart } from '../components/TrendChart'
 import { OutbreakMap } from '../components/OutbreakMap'
 import { RegionTable } from '../components/RegionTable'
-import { SourcePanel } from '../components/SourcePanel'
 import { SourceBadge } from '../components/SourceBadge'
+import { HeadlinesBox } from '../components/HeadlinesBox'
 import { ErrorPanel } from '../components/ErrorPanel'
 import {
   toWeeklyChartPoints,
@@ -214,12 +214,15 @@ export function Dashboard() {
           </p>
         </section>
 
-        {/* Map */}
+        {/* Map + Headlines */}
         <section>
           <h2 className="mb-3 font-mono text-xs uppercase tracking-widest text-slate-700">
             Geographic Distribution
           </h2>
           <OutbreakMap records={records} />
+          <div className="mt-4">
+            <HeadlinesBox />
+          </div>
         </section>
 
         {/* Charts */}
@@ -262,10 +265,6 @@ export function Dashboard() {
           <RegionTable records={records} />
         </section>
 
-        {/* Source panel */}
-        <section>
-          <SourcePanel statuses={statuses} />
-        </section>
       </main>
 
       <footer className="mt-12 border-t border-slate-800 px-4 py-6">
