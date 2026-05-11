@@ -13,7 +13,6 @@ import { ErrorPanel } from '../components/ErrorPanel'
 import {
   toWeeklyChartPoints,
   toMonthlyChartPoints,
-  toYearlyChartPoints,
   filterByTimeRange,
 } from '../lib/normalize'
 import { formatCount, formatCFR, calcCFR, sumOptional } from '../lib/epidemiology'
@@ -90,7 +89,6 @@ export function Dashboard() {
   // ── Chart data ──────────────────────────────────────────────────
   const allWeekly = toWeeklyChartPoints(records)
   const allMonthly = toMonthlyChartPoints(records)
-  const allYearly = toYearlyChartPoints(records)
 
   const weeklyData = filterByTimeRange(allWeekly, timeRange, currentYear, currentWeek)
   const monthlyData = filterByTimeRange(allMonthly, timeRange, currentYear, currentWeek)
@@ -244,15 +242,6 @@ export function Dashboard() {
               timeRange={timeRange}
               onTimeRangeChange={setTimeRange}
               granularity="monthly"
-            />
-          </div>
-          <div className="mt-4">
-            <TrendChart
-              title="Annual Cases"
-              data={allYearly}
-              timeRange={timeRange}
-              onTimeRangeChange={setTimeRange}
-              granularity="yearly"
             />
           </div>
         </section>
